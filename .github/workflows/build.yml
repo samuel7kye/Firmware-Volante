@@ -1,0 +1,18 @@
+name: Windows build
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Compile and validate
+        shell: powershell
+        run: .\build.ps1 -Test
+      - uses: actions/upload-artifact@v7
+        with:
+          name: VolanteStudio-Windows
+          path: |
+            bin/VolanteStudio.exe
+            bin/VolanteStudio.exe.config
