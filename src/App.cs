@@ -70,6 +70,7 @@ namespace VolanteStudio {
             AddOptionalInputs();
             Click("NavHome",()=>Navigate("Home"));Click("NavEffects",()=>Navigate("Effects"));Click("NavProfiles",()=>{RefreshProfiles();Navigate("Profiles");});Click("NavDevice",()=>Navigate("Device"));
             NativeWindowTheme.Apply(window);
+            ResponsiveLayout.Apply(window);
             Click("DemoToggle",()=>{ this.demo=!this.demo;lastReady=false;UpdateDemo();SetStatus(this.demo?"Demonstração visual":"Modo USB",this.demo?"Movimentos simulados. Nenhum ajuste é enviado ao volante.":"Aguardando leitura do dispositivo."); });
             Click("WindowsTest",OpenWindowsTest);Click("WindowsTestDevice",OpenWindowsTest);
             Find<Button>("CenterButton").Click+=async(s,e)=>await SendCommand("DoSetCenter",null,"Centralização enviada");
