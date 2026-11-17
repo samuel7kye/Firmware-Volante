@@ -14,6 +14,7 @@ namespace VolanteStudio {
             var home=(Grid)window.FindName("HomePage");
             var panels=home.Children.Cast<UIElement>().Take(3).ToArray();
             home.MinHeight=compact?1100:600;
+            ((Grid)window.FindName("PageContent")).MinHeight=compact?1100:600;
             home.ColumnDefinitions[0].Width=new GridLength(1,GridUnitType.Star);
             home.ColumnDefinitions[1].Width=new GridLength(compact?1:1.45,GridUnitType.Star);
             home.ColumnDefinitions[2].Width=compact?new GridLength(0):new GridLength(1,GridUnitType.Star);

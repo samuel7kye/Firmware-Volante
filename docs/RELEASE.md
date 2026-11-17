@@ -1,10 +1,10 @@
-# Volante Studio 1.0.0
+# Volante Studio 1.0.1
 
 Instalador completo para Windows 10 e 11, em português. Inclui as bibliotecas necessárias: não exige instalação separada do EMC Utility Lite.
 
 ## Como usar
 
-1. Baixe `VolanteStudio-Setup-1.0.0.exe` nos anexos da release.
+1. Baixe `VolanteStudio-Setup-1.0.1.exe` nos anexos da release.
 2. Abra o arquivo e siga as instruções.
 3. Abra o Volante Studio pelo menu Iniciar ou pelo atalho.
 4. Conecte seu Leonardo já preparado com firmware compatível, ou use **Explorar demonstração**.
@@ -17,8 +17,8 @@ Esta versão não grava firmware nem instala drivers. O teste físico dos eixos,
 
 ## Arquivos para anexar à release
 
-- `release/VolanteStudio-Setup-1.0.0.exe`
-- `release/VolanteStudio-Setup-1.0.0.exe.sha256`
+- `release/VolanteStudio-Setup-1.0.1.exe`
+- `release/VolanteStudio-Setup-1.0.1.exe.sha256`
 
 O segundo arquivo permite conferir a integridade do download. Não é necessário para instalar.
 

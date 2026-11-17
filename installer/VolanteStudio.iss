@@ -7,7 +7,7 @@
 [Setup]
 AppId={{A75EFC4E-2AE0-4F4E-9624-51637C18860B}
 AppName=Volante Studio
-AppVersion=1.0.0
+AppVersion=1.0.1
 AppPublisher=Projeto Volante Studio
 AppPublisherURL=https://github.com/samuel7kye/Firmware-Volante
 AppSupportURL=https://github.com/samuel7kye/Firmware-Volante/issues
@@ -17,7 +17,7 @@ DisableProgramGroupPage=yes
 PrivilegesRequired=lowest
 MinVersion=10.0
 OutputDir={#OutputPath}
-OutputBaseFilename=VolanteStudio-Setup-1.0.0
+OutputBaseFilename=VolanteStudio-Setup-1.0.1
 Compression=lzma2
 SolidCompression=yes
 WizardStyle=modern
@@ -29,7 +29,7 @@ RestartApplications=no
 InfoBeforeFile=ANTES-DE-INSTALAR.txt
 VersionInfoDescription=Instalador do Volante Studio
 VersionInfoProductName=Volante Studio
-VersionInfoVersion=1.0.0.0
+VersionInfoVersion=1.0.1.0
 
 [Languages]
 Name: "brazilianportuguese"; MessagesFile: "compiler:Languages\BrazilianPortuguese.isl"
