@@ -4,19 +4,22 @@ Aplicativo nativo para Windows que renova a interface de configuração do volan
 
 ![Painel do Volante Studio em demonstração](docs/preview.jpg)
 
-## Abrir
+## Instalar (recomendado)
 
-Com o EMCLite original instalado, abra **[release/VolanteStudio.exe](release/VolanteStudio.exe)**. Mantenha o arquivo `.config` ao lado do executável. A pasta `release` pode ficar em Documentos.
+Baixe o **[instalador completo VolanteStudio-Setup-1.0.0.exe](https://github.com/samuel7kye/Firmware-Volante/raw/refs/heads/main/release/VolanteStudio-Setup-1.0.0.exe)** e siga as instruções em português. Ele inclui todas as bibliotecas necessárias; **não precisa instalar o EMCLite separadamente**.
 
-O pacote portátil local também inclui uma cópia das bibliotecas do aplicativo já instalado. Nenhum instalador é necessário. Para outra máquina, mantenha a pasta `compat` junto ao executável ou instale a sua cópia legítima do EMCLite.
+O instalador cria uma entrada no menu Iniciar, oferece atalho na área de trabalho e permite desinstalar pelas Configurações do Windows. Instala para o usuário atual, sem solicitar senha de administrador. Perfis existentes são preservados em atualizações e na desinstalação.
 
-1. Feche o EMCLite antigo para evitar duas interfaces disputando a mesma conexão.
-2. Abra o Volante Studio e conecte o Leonardo pelo USB.
-3. Confira o indicador de conexão e a leitura dos eixos.
-4. Prepare os ajustes e clique em **Aplicar ao volante**.
-5. Use **Perfis** para salvar combinações neste computador.
+1. Feche o EMCLite antigo, caso esteja aberto.
+2. Abra o Volante Studio e conecte o Leonardo com o firmware compatível já gravado.
+3. Confira o indicador de conexão, prepare os ajustes e clique em **Aplicar ao volante**.
+4. Use **Perfis** para salvar combinações neste computador.
 
-Sem o volante, clique em **Explorar demonstração**. Os movimentos são identificados como simulados e todos os envios USB ficam bloqueados. A demonstração não é usada automaticamente quando o USB está ausente.
+Sem o volante, clique em **Explorar demonstração**. Os movimentos são identificados como simulados e os envios USB ficam bloqueados.
+
+O arquivo avulso `release/VolanteStudio.exe` é apenas a interface; para distribuir o projeto a outros alunos, use o arquivo **Setup**, que contém o pacote completo. Requer Windows 10/11 e .NET Framework 4.6.1 ou superior. O instalador ainda não possui assinatura digital de editor.
+
+Para criar uma release, anexe o instalador e seu arquivo `.sha256`. Há um texto pronto e instruções de empacotamento em [installer/RELEASE.md](installer/RELEASE.md).
 
 ## O que está incluído
 
@@ -69,4 +72,5 @@ O script apenas lê a instalação original e copia suas bibliotecas para `bin/c
 | `docs/INTEROPERABILIDADE.md` | Mapeamento verificado da integração |
 | `release/` | Executável da interface e configuração |
 
-As bibliotecas de terceiros, o firmware e os backups pessoais não são publicados no Git. Consulte [THIRD_PARTY.md](THIRD_PARTY.md).
+O instalador completo inclui as bibliotecas de terceiros. O firmware e os backups pessoais permanecem locais. Consulte [THIRD_PARTY.md](THIRD_PARTY.md).
+

@@ -1,0 +1,29 @@
+VOLANTE STUDIO — PRIMEIROS PASSOS
+
+1. Abra o Volante Studio pelo menu Iniciar ou pelo atalho da área de trabalho.
+2. Feche o EMCLite antigo, se ele estiver aberto.
+3. Conecte o volante Arduino Leonardo ao USB e aguarde o indicador de conexão.
+4. Ajuste os valores e clique em Aplicar ao volante.
+5. Para guardar combinações, abra Perfis e escolha Salvar perfil.
+
+Sem o volante, clique em Explorar demonstração para conhecer a interface.
+Nesse modo os movimentos são simulados e nenhum ajuste é enviado por USB.
+
+Não é necessário instalar o EMCLite: suas bibliotecas já acompanham este pacote.
+O Leonardo precisa estar previamente preparado com o firmware compatível.
+Este instalador não grava firmware nem instala drivers.
+
+PERFIS E ATUALIZAÇÕES
+Os perfis ficam em Data\Profiles dentro da pasta escolhida na instalação.
+Para atualizar, feche o aplicativo e execute o novo instalador usando a mesma pasta.
+A atualização e a desinstalação preservam os perfis existentes.
+
+DESINSTALAÇÃO
+Use Configurações do Windows > Aplicativos > Volante Studio > Desinstalar.
+
+VALIDAÇÃO
+A interface e os testes de software foram verificados. A leitura dos eixos,
+force feedback, reconexão e compatibilidade com jogos precisam de validação
+com o volante físico.
+
+Projeto: https://github.com/samuel7kye/Firmware-Volante

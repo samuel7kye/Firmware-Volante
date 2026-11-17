@@ -1,0 +1,15 @@
+Bem-vindo ao Volante Studio
+
+Este instalador inclui o aplicativo e os componentes de comunicação necessários.
+Você não precisa instalar o EMC Utility Lite separadamente.
+
+Requisitos: Windows 10 ou 11 com .NET Framework 4.6.1 ou superior.
+
+O aplicativo configura um volante Arduino Leonardo que já possui o firmware
+EMC compatível. O instalador não grava firmware, não instala drivers e não
+altera a montagem do volante.
+
+Feche o Volante Studio antes de instalar uma atualização.
+Os perfis salvos são preservados nas atualizações e na desinstalação.
+
+O teste com o volante físico ainda está pendente nesta versão.
