@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
@@ -69,8 +69,7 @@ namespace VolanteStudio {
             AddPedal("Freio de mão","Handbrake",0,1024,"HandbrakeMin","HandbrakeMax","#248CFF");
             AddOptionalInputs();
             Click("NavHome",()=>Navigate("Home"));Click("NavEffects",()=>Navigate("Effects"));Click("NavProfiles",()=>{RefreshProfiles();Navigate("Profiles");});Click("NavDevice",()=>Navigate("Device"));
-            Click("Minimize",()=>window.WindowState=WindowState.Minimized);Click("Maximize",()=>ToggleMaximize());Click("Close",()=>window.Close());
-            Find<Grid>("TitleBar").MouseLeftButtonDown+=(s,e)=>{if(e.ClickCount==2)ToggleMaximize();else if(e.ButtonState==MouseButtonState.Pressed)window.DragMove();};
+            NativeWindowTheme.Apply(window);
             Click("DemoToggle",()=>{ demo=!demo;lastReady=false;UpdateDemo();SetStatus(demo?"Demonstração visual":"Modo USB",demo?"Movimentos simulados. Nenhum ajuste é enviado ao volante.":"Aguardando leitura do dispositivo."); });
             Click("WindowsTest",OpenWindowsTest);Click("WindowsTestDevice",OpenWindowsTest);
             Find<Button>("CenterButton").Click+=async(s,e)=>await SendCommand("DoSetCenter",null,"Centralização enviada");
@@ -95,7 +94,6 @@ namespace VolanteStudio {
         T Find<T>(string name) where T:class { return (T)window.FindName(name); }
         static Brush Brush(string color) { return (Brush)new BrushConverter().ConvertFromString(color); }
         void Click(string name,Action action) { Find<Button>(name).Click+=(s,e)=>action(); }
-        void ToggleMaximize() { window.WindowState=window.WindowState==WindowState.Maximized?WindowState.Normal:WindowState.Maximized; }
         void Navigate(string page) {
             foreach(var p in new[]{"Home","Effects","Profiles","Device"}) {
                 Find<Grid>(p+"Page").Visibility=p==page?Visibility.Visible:Visibility.Collapsed;

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 namespace VolanteStudio {
@@ -33,6 +33,14 @@ namespace VolanteStudio {
      var controller=new StudioController(window,true);
      Check(!((System.Windows.Controls.Button)window.FindName("ApplyButton")).IsEnabled,"Demo cannot apply USB settings");
      Check(((System.Windows.Controls.Grid)window.FindName("WheelHost")).Children.Count==1,"Native interface and steering wheel construct successfully");
+     Check(window.WindowStyle==System.Windows.WindowStyle.SingleBorderWindow,"System caption provides native window controls");
+     var viewport=window.Content as System.Windows.Controls.ScrollViewer;
+     Check(viewport!=null,"Window content adapts without whole-interface scaling");
+     foreach(var size in new[]{new System.Windows.Size(1920,1080),new System.Windows.Size(2560,1080),new System.Windows.Size(960,620)}) {
+      viewport.Measure(size);viewport.Arrange(new System.Windows.Rect(size));viewport.UpdateLayout();
+      var surface=(System.Windows.FrameworkElement)viewport.Content;
+      Check(surface.ActualWidth>=size.Width-20 && surface.ActualHeight>=size.Height-20,"Content fills viewport at "+size);
+     }
      window.Close();GC.KeepAlive(controller);
     }
     app.Shutdown();
