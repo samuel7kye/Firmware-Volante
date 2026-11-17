@@ -14,7 +14,7 @@ Copy-Item -LiteralPath (Join-Path $root 'src\App.config') -Destination (Join-Pat
 foreach ($dll in @('EMC.dll','EMCHid.dll','MaterialDesignColors.dll','MaterialDesignThemes.Wpf.dll')) {
     $source = Join-Path $OriginalPath $dll
     if (Test-Path $source) { Copy-Item -LiteralPath $source -Destination (Join-Path $bin 'compat') }
-    else { Write-Warning "$dll não encontrada. Instale o EMCLite original ou informe -OriginalPath." }
+    else { Write-Warning "$dll não encontrada. Para incluir a comunicação, informe -OriginalPath com a pasta compat do pacote completo." }
 }
 if ($Test) {
     & (Join-Path $framework 'csc.exe') /nologo /target:exe "/out:$bin\Tests.exe" /main:VolanteStudio.Tests "/resource:$root\src\MainWindow.xaml,MainWindow.xaml" @refs @sources (Join-Path $root 'tests\Tests.cs')

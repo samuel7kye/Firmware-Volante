@@ -1,8 +1,8 @@
-# Integração com o aplicativo existente
+# Integração USB e bibliotecas
 
 A instalação examinada expõe `EMC.MainViewModel`, `EMCHid.HidUtility` e comandos WPF. Sua identificação visual de software era `0.934`. O firmware fornecido em separado chama-se `EMCLite0932.hex`; não foi alterado nem gravado.
 
-A interface foi escrita do zero. Não recompila nem modifica as bibliotecas originais. A inicialização acontece no dispatcher WPF depois da criação da janela. Conexão é lida de `HidUtil.ConnectionStatus`; comandos só ficam disponíveis quando a própria biblioteca habilita `mainWindow`.
+As bibliotecas necessárias acompanham o instalador; não é necessário instalar o EMCLite. A interface foi escrita do zero. Não recompila nem modifica as bibliotecas originais. A inicialização acontece no dispatcher WPF depois da criação da janela. Conexão é lida de `HidUtil.ConnectionStatus`; comandos só ficam disponíveis quando a própria biblioteca habilita `mainWindow`.
 
 ## Escalas e comandos
 

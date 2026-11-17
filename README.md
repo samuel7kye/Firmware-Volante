@@ -1,76 +1,56 @@
 # Volante Studio
 
-Aplicativo nativo para Windows que renova a interface de configuração do volante Arduino Leonardo com EMC Utility Lite. Fundo preto com iluminação difusa, controles azuis, volante vetorial animado e interface em português.
+Aplicativo para configurar um volante Arduino Leonardo no Windows, com interface em português, visual escuro, controles azuis e volante animado.
 
-![Painel do Volante Studio em demonstração](docs/preview.jpg)
+**Autor: Samuel — [@samuel7kye](https://github.com/samuel7kye)**
+Projeto acadêmico para a faculdade.
 
-## Instalar (recomendado)
+![Volante Studio em modo de demonstração](docs/preview.jpg)
 
-Baixe o **[instalador completo VolanteStudio-Setup-1.0.0.exe](https://github.com/samuel7kye/Firmware-Volante/raw/refs/heads/main/release/VolanteStudio-Setup-1.0.0.exe)** e siga as instruções em português. Ele inclui todas as bibliotecas necessárias; **não precisa instalar o EMCLite separadamente**.
+## Instalação
 
-O instalador cria uma entrada no menu Iniciar, oferece atalho na área de trabalho e permite desinstalar pelas Configurações do Windows. Instala para o usuário atual, sem solicitar senha de administrador. Perfis existentes são preservados em atualizações e na desinstalação.
+**[Baixar o instalador completo (.exe)](https://github.com/samuel7kye/Firmware-Volante/raw/refs/heads/main/release/VolanteStudio-Setup-1.0.0.exe)**
 
-1. Feche o EMCLite antigo, caso esteja aberto.
-2. Abra o Volante Studio e conecte o Leonardo com o firmware compatível já gravado.
-3. Confira o indicador de conexão, prepare os ajustes e clique em **Aplicar ao volante**.
-4. Use **Perfis** para salvar combinações neste computador.
+1. Baixe e execute o instalador.
+2. Siga as instruções em português.
+3. Abra o Volante Studio pelo menu Iniciar ou pelo atalho da área de trabalho.
 
-Sem o volante, clique em **Explorar demonstração**. Os movimentos são identificados como simulados e os envios USB ficam bloqueados.
+O instalador já inclui as bibliotecas necessárias. **Não é necessário instalar o EMCLite separadamente.** A instalação é feita para o usuário atual e pode ser removida pelas Configurações do Windows. Atualizações e desinstalação preservam os perfis salvos.
 
-O arquivo avulso `release/VolanteStudio.exe` é apenas a interface; para distribuir o projeto a outros alunos, use o arquivo **Setup**, que contém o pacote completo. Requer Windows 10/11 e .NET Framework 4.6.1 ou superior. O instalador ainda não possui assinatura digital de editor.
+Requisitos: Windows 10 ou 11 e .NET Framework 4.6.1 ou superior. O instalador verifica esse requisito. O executável ainda não possui assinatura digital de editor.
 
-Para criar uma release, anexe o instalador e seu arquivo `.sha256`. Há um texto pronto e instruções de empacotamento em [installer/RELEASE.md](installer/RELEASE.md).
+## Como usar
 
-## O que está incluído
+Conecte pelo USB um Leonardo já preparado com firmware EMC compatível. Aguarde o indicador de conexão, ajuste os valores e clique em **Aplicar ao volante**. Em **Perfis**, salve configurações para reutilizar depois.
 
-- Ângulo de 30° a 1080°, com atalhos para ângulos comuns.
+Sem o volante conectado, escolha **Explorar demonstração** para conhecer a interface. Nesse modo, os movimentos são simulados e nenhum ajuste é enviado ao dispositivo.
+
+## Recursos
+
+- Ângulo de rotação, centralização e visualização da direção.
 - Intensidade, força mínima, amortecimento, batente, atrito e inércia.
-- Leitura do volante, acelerador, freio, embreagem e freio de mão.
-- Centralização e calibração de mínimo/máximo dos pedais.
-- CPR do encoder, modo da ponte H e ativação das entradas opcionais.
-- Perfis XML locais em `Data/Profiles`, sem envio automático ao carregar.
-- Acesso ao painel de controladores do Windows para testar botões.
-- Reconhecimento USB delegado ao componente original, sem drivers adicionais.
-- Janela redimensionável com layout vetorial proporcional.
+- Leitura e calibração dos pedais.
+- Configuração do encoder, ponte H e entradas opcionais.
+- Perfis locais e acesso ao teste de botões do Windows.
 
-## Firmware e compatibilidade
+## Compatibilidade e testes
 
-Este repositório é o **aplicativo**, não um firmware novo. Não há gravador, comunicação com bootloader, mudança de descritor USB ou instalação de driver. O arquivo `EMCLite0932.hex` fornecido permanece intacto.
+O aplicativo utiliza as bibliotecas EMC incluídas no pacote. O Leonardo continua enviando os comandos aos jogos pelo firmware atual. O instalador não grava firmware nem instala drivers.
 
-A comunicação usa as APIs públicas de `EMC.dll` e `EMCHid.dll` da instalação existente. Os jogos continuam recebendo o dispositivo HID diretamente do firmware do Leonardo; a nova interface não fica entre o volante e o jogo. A compatibilidade efetiva continua dependendo do firmware, da montagem e do jogo.
+A interface, os 17 testes de software e a instalação, atualização e desinstalação foram verificados. **Os testes físicos de eixos, force feedback, reconexão e funcionamento em jogos ainda estão pendentes.**
 
-**Situação da validação:** build e 17 testes locais aprovados; navegação, demonstração, perfis e bloqueio de comandos sem dispositivo conferidos na aplicação aberta. A montagem dos comandos foi examinada em memória com a biblioteca original, isolada de hardware. **Leitura de eixos físicos, force feedback, reconexão e persistência no Leonardo ainda precisam de teste com o volante conectado.**
+## Organização do projeto
 
-O aviso “comandos enviados” significa uma transferência USB bem-sucedida com o relatório, comando e valor esperados. Não representa confirmação de gravação em EEPROM. O aplicativo não inventa uma operação “salvar no dispositivo” que a API não fornece.
-
-## Compilar
-
-Requisitos: Windows com .NET Framework 4.6.1 ou superior e Windows PowerShell. Não exige Node, navegador, Visual Studio nem downloads de pacotes.
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\build.ps1 -Test
-```
-
-O resultado fica em `bin/VolanteStudio.exe`. Para usar uma cópia de backup do EMCLite:
-
-```powershell
-.\build.ps1 -OriginalPath 'C:\caminho\EMCLite-original' -Test
-```
-
-O script apenas lê a instalação original e copia suas bibliotecas para `bin/compat`. A ausência delas não impede compilar nem executar os testes de interface e validação; impede a comunicação real.
-
-## Estrutura
-
-| Local | Conteúdo |
+| Pasta ou arquivo | Finalidade |
 |---|---|
-| `src/MainWindow.xaml` | Layout, cores e controles |
-| `src/WheelView.cs` | Desenho e rotação do volante |
-| `src/App.cs` | Navegação, leitura, perfis e envio explícito |
-| `src/EmcBridge.cs` | Integração com as bibliotecas originais |
-| `src/TransferExpectation.cs` | Correspondência dos comprovantes de envio |
-| `tests/Tests.cs` | Validação de escalas, perfis, interface e bloqueios |
-| `docs/INTEROPERABILIDADE.md` | Mapeamento verificado da integração |
-| `release/` | Executável da interface e configuração |
+| `src/` | Código-fonte da interface e comunicação |
+| `tests/` | Testes automatizados |
+| `installer/` | Definição do instalador e instruções incluídas nele |
+| `release/` | Instalador completo e verificação SHA-256 |
+| `docs/` | Prévia, documentação técnica e orientações de release |
+| `build.ps1` | Compilação e testes do aplicativo |
+| `build-installer.ps1` | Empacotamento do instalador |
 
-O instalador completo inclui as bibliotecas de terceiros. O firmware e os backups pessoais permanecem locais. Consulte [THIRD_PARTY.md](THIRD_PARTY.md).
+Para desenvolver, execute `powershell -NoProfile -ExecutionPolicy Bypass -File .\build.ps1 -Test`. A compilação e os testes da interface não exigem instalação do EMCLite. Para empacotar a comunicação, forneça ao build as bibliotecas que acompanham o pacote; veja [como gerar o instalador](docs/RELEASE.md).
 
+Documentação: [integração USB](docs/INTEROPERABILIDADE.md), [testes do instalador](docs/TESTES-INSTALADOR.md) e [componentes de terceiros](THIRD_PARTY.md). A autoria do projeto não altera os créditos e os termos das bibliotecas utilizadas.

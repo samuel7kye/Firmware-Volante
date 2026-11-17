@@ -27,7 +27,7 @@ O segundo arquivo permite conferir a integridade do download. Não é necessári
 Compile o aplicativo e obtenha as quatro bibliotecas de comunicação da distribuição utilizada no projeto. Com Inno Setup 7 instalado:
 
 ```powershell
-.\build.ps1 -Test
+.\build.ps1 -OriginalPath 'C:\caminho\Volante Studio\compat' -Test
 .\build-installer.ps1 -IsccPath 'C:\caminho\Inno Setup 7\ISCC.exe'
 ```
 
