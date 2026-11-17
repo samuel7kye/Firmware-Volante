@@ -1,47 +1,47 @@
-using System;
+﻿using System;
 using System.Windows;
 using System.Windows.Media;
 
 namespace VolanteStudio {
+    // Vector sports wheel: stays sharp at any display scale and rotates with live input.
     public sealed class WheelView : FrameworkElement {
         public double Angle { get; set; }
         static Brush Solid(string color) { return (Brush)new BrushConverter().ConvertFromString(color); }
-        static LinearGradientBrush Metal() {
-            return new LinearGradientBrush(new GradientStopCollection { new GradientStop(Color.FromRgb(105,113,124),0),new GradientStop(Color.FromRgb(49,55,64),0.35),new GradientStop(Color.FromRgb(26,31,39),0.65),new GradientStop(Color.FromRgb(72,82,96),1) },new Point(0,0),new Point(1,1));
-        }
+        static Geometry Shape(string data) { return Geometry.Parse(data); }
         protected override void OnRender(DrawingContext dc) {
             base.OnRender(dc);
-            dc.DrawEllipse(null,new Pen(Solid("#1B2531"),0.8),new Point(200,200),184,184);
-            dc.DrawEllipse(null,new Pen(Solid("#121D29"),0.8),new Point(200,200),198,198);
+            dc.DrawEllipse(null,new Pen(Solid("#1B2531"),1),new Point(200,200),190,190);
             dc.PushTransform(new RotateTransform(Angle,200,200));
-            var shadow=new RadialGradientBrush(new GradientStopCollection { new GradientStop(Color.FromArgb(140,0,0,0),0.6),new GradientStop(Colors.Transparent,1) });
-            dc.DrawEllipse(shadow,null,new Point(200,215),194,184);
-            dc.DrawEllipse(Solid("#0A0D12"),new Pen(Solid("#333B46"),2),new Point(200,200),166,166);
-            dc.DrawEllipse(null,new Pen(new LinearGradientBrush(Color.FromRgb(65,70,78),Color.FromRgb(13,16,21),90),28),new Point(200,200),150,150);
-            dc.DrawEllipse(null,new Pen(Solid("#10141A"),1),new Point(200,200),136,136);
-            dc.DrawEllipse(null,new Pen(Solid("#444C58"),1),new Point(200,200),164,164);
-            for(int i=0;i<96;i++) {
-                double a=i*Math.PI*2/96;
-                dc.DrawLine(new Pen(Solid(i%2==0?"#454B53":"#202730"),0.7),new Point(200+155*Math.Cos(a),200+155*Math.Sin(a)),new Point(200+159*Math.Cos(a+0.008),200+159*Math.Sin(a+0.008)));
-            }
-            var metal=Metal();
-            foreach(var shape in new[]{"M 158,178 L 65,150 Q 51,162 57,181 L 160,224 L 180,198 Z","M 242,178 L 335,150 Q 349,162 343,181 L 240,224 L 220,198 Z","M 174,225 L 178,338 Q 200,349 222,338 L 226,225 Z"})
-                dc.DrawGeometry(metal,new Pen(Solid("#515B69"),1),Geometry.Parse(shape));
-            dc.DrawGeometry(Solid("#10151D"),null,Geometry.Parse("M 82,167 L 145,187 L 144,199 L 79,178 Z M 318,167 L 255,187 L 256,199 L 321,178 Z M 194,260 L 206,260 L 207,321 L 193,321 Z"));
+            // Shift paddles behind the rim.
+            for(int side=-1;side<=1;side+=2)
+                dc.DrawRoundedRectangle(new LinearGradientBrush(Color.FromRgb(95,103,115),Color.FromRgb(27,33,43),0),new Pen(Solid("#748093"),1),new Rect(side<0?74:301,115,25,128),9,9);
+            var rim=Shape("M 200,34 C 296,34 366,104 366,199 C 366,258 336,314 299,343 Q 285,355 264,355 L 136,355 Q 115,355 101,343 C 64,314 34,258 34,199 C 34,104 104,34 200,34 Z M 200,71 C 126,71 73,127 73,199 C 73,243 94,284 124,311 Q 130,317 144,317 L 256,317 Q 270,317 276,311 C 306,284 327,243 327,199 C 327,127 274,71 200,71 Z");
+            dc.DrawGeometry(new LinearGradientBrush(Color.FromRgb(57,63,73),Color.FromRgb(13,17,24),90),new Pen(Solid("#667180"),1.5),rim);
+            // Sculpted thumb grips.
+            dc.DrawGeometry(Solid("#111720"),new Pen(Solid("#394352"),1),Shape("M 48,132 Q 63,122 80,143 L 104,172 Q 110,187 94,201 L 75,221 Q 54,234 40,220 Q 34,174 48,132 Z M 352,132 Q 337,122 320,143 L 296,172 Q 290,187 306,201 L 325,221 Q 346,234 360,220 Q 366,174 352,132 Z"));
+            // Three machined spokes and flat lower section.
+            var metal=new LinearGradientBrush(Color.FromRgb(74,83,97),Color.FromRgb(23,29,38),90);
+            dc.DrawGeometry(metal,new Pen(Solid("#687589"),1),Shape("M 79,176 L 165,177 L 190,206 L 163,233 L 76,214 Z M 321,176 L 235,177 L 210,206 L 237,233 L 324,214 Z M 174,227 L 226,227 L 245,325 L 155,325 Z"));
+            dc.DrawGeometry(Solid("#090E15"),new Pen(Solid("#384353"),1),Shape("M 188,254 L 212,254 L 220,307 L 180,307 Z"));
+            // Perforated leather on both hand grips.
+            for(int side=-1;side<=1;side+=2)
+                for(int row=0;row<9;row++)
+                    for(int col=0;col<3;col++)
+                        dc.DrawEllipse(Solid("#070B10"),null,new Point(200+side*(145+col*5),153+row*7),1.1,1.1);
             for(int side=-1;side<=1;side+=2) {
-                dc.DrawEllipse(Solid("#0D1117"),new Pen(Solid("#465262"),1),new Point(200+side*111,183),7,7);
-                dc.DrawEllipse(Solid("#0D1117"),new Pen(Solid("#465262"),1),new Point(200+side*85,192),5,5);
+                dc.DrawRoundedRectangle(Solid("#101721"),new Pen(Solid("#48566B"),1),new Rect(side<0?105:252,184,43,28),7,7);
+                dc.DrawEllipse(Solid("#278DFA"),new Pen(Solid("#8BC7FF"),0.7),new Point(200+side*74,198),6,6);
             }
-            dc.DrawEllipse(new LinearGradientBrush(Color.FromRgb(66,75,88),Color.FromRgb(17,23,31),90),new Pen(Solid("#657285"),1),new Point(200,200),49,49);
-            dc.DrawEllipse(Solid("#131B26"),new Pen(Solid("#3D4D61"),1),new Point(200,200),31,31);
+            dc.DrawEllipse(new LinearGradientBrush(Color.FromRgb(58,68,82),Color.FromRgb(16,23,33),90),new Pen(Solid("#7A879A"),1.5),new Point(200,206),47,47);
+            dc.DrawEllipse(Solid("#101721"),new Pen(Solid("#36495F"),1),new Point(200,206),30,30);
             for(int i=0;i<6;i++) {
-                double a=i*Math.PI/3-Math.PI/2;var p=new Point(200+39*Math.Cos(a),200+39*Math.Sin(a));
-                dc.DrawEllipse(Solid("#9BA5B3"),new Pen(Solid("#0C1016"),1),p,3.7,3.7);
-                dc.DrawLine(new Pen(Solid("#272E39"),1),new Point(p.X-1.6,p.Y-1.6),new Point(p.X+1.6,p.Y+1.6));
+                double a=i*Math.PI/3;
+                dc.DrawEllipse(Solid("#A1ADBD"),new Pen(Solid("#141A23"),1),new Point(200+38*Math.Cos(a),206+38*Math.Sin(a)),3,3);
             }
-            dc.DrawGeometry(Solid("#258FFF"),null,Geometry.Parse("M 185,191 L 209,191 L 205,196 L 191,196 L 188,202 L 208,202 L 201,212 L 178,212 L 182,207 L 197,207 L 200,202 L 181,202 Z"));
-            dc.DrawRoundedRectangle(Solid("#238FFF"),new Pen(Solid("#68BCFF"),1),new Rect(193,34,14,28),2,2);
-            dc.DrawLine(new Pen(Solid("#449EFA"),2),new Point(194,64),new Point(206,64));
+            // Center emblem and twelve-o'clock alignment stripe.
+            dc.DrawGeometry(Solid("#329BFF"),null,Shape("M 185,198 L 215,198 L 211,204 L 197,204 L 193,210 L 209,210 L 205,216 L 181,216 Z"));
+            dc.DrawGeometry(Solid("#2C98FF"),new Pen(Solid("#86C6FF"),1),Shape("M 192,35 Q 200,34 208,35 L 208,71 L 192,71 Z"));
+            dc.DrawLine(new Pen(Solid("#2C98FF"),2),new Point(148,342),new Point(252,342));
             dc.Pop();
         }
     }
