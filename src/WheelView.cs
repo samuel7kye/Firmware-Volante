@@ -1,47 +1,51 @@
 ﻿using System;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Media;
 
 namespace VolanteStudio {
-    // Vector sports wheel: stays sharp at any display scale and rotates with live input.
     public sealed class WheelView : FrameworkElement {
         public double Angle { get; set; }
         static Brush Solid(string color) { return (Brush)new BrushConverter().ConvertFromString(color); }
         static Geometry Shape(string data) { return Geometry.Parse(data); }
+        void Label(DrawingContext dc,string text,double size,string color,double x,double y,bool bold) {
+            var label=new FormattedText(text,CultureInfo.InvariantCulture,FlowDirection.LeftToRight,new Typeface(new FontFamily("Segoe UI"),FontStyles.Normal,bold?FontWeights.Bold:FontWeights.Normal,FontStretches.Normal),size,Solid(color),VisualTreeHelper.GetDpi(this).PixelsPerDip);
+            dc.DrawText(label,new Point(x-label.Width/2,y));
+        }
         protected override void OnRender(DrawingContext dc) {
             base.OnRender(dc);
-            dc.DrawEllipse(null,new Pen(Solid("#1B2531"),1),new Point(200,200),190,190);
-            dc.PushTransform(new RotateTransform(Angle,200,200));
-            // Shift paddles behind the rim.
+            // Fixed decorative instrument cluster; deliberately independent of live input.
+            dc.PushOpacity(0.48);
+            dc.DrawEllipse(Solid("#0D1622"),new Pen(Solid("#39495E"),1),new Point(200,128),151,111);
+            for(int i=0;i<=24;i++) {
+                double a=(150+i*10)*Math.PI/180;
+                var outer=new Point(200+140*Math.Cos(a),137+103*Math.Sin(a));
+                var inner=new Point(200+(i%4==0?125:133)*Math.Cos(a),137+(i%4==0?88:96)*Math.Sin(a));
+                dc.DrawLine(new Pen(Solid(i>=20?"#B14D51":"#70859E"),i%4==0?2:1),outer,inner);
+                if(i%4==0)Label(dc,(i*10).ToString(),10,"#92A4BA",200+110*Math.Cos(a),132+75*Math.Sin(a),false);
+            }
+            Label(dc,"km/h",9,"#7D8FA6",200,92,false);
+            dc.DrawLine(new Pen(Solid("#C25C62"),2),new Point(200,137),new Point(110,111));
+            dc.Pop();
+            dc.PushTransform(new RotateTransform(Angle,200,210));
+            // Simplified R35 silhouette with silver Y spokes and broad airbag hub.
             for(int side=-1;side<=1;side+=2)
-                dc.DrawRoundedRectangle(new LinearGradientBrush(Color.FromRgb(95,103,115),Color.FromRgb(27,33,43),0),new Pen(Solid("#748093"),1),new Rect(side<0?74:301,115,25,128),9,9);
-            var rim=Shape("M 200,34 C 296,34 366,104 366,199 C 366,258 336,314 299,343 Q 285,355 264,355 L 136,355 Q 115,355 101,343 C 64,314 34,258 34,199 C 34,104 104,34 200,34 Z M 200,71 C 126,71 73,127 73,199 C 73,243 94,284 124,311 Q 130,317 144,317 L 256,317 Q 270,317 276,311 C 306,284 327,243 327,199 C 327,127 274,71 200,71 Z");
-            dc.DrawGeometry(new LinearGradientBrush(Color.FromRgb(57,63,73),Color.FromRgb(13,17,24),90),new Pen(Solid("#667180"),1.5),rim);
-            // Sculpted thumb grips.
-            dc.DrawGeometry(Solid("#111720"),new Pen(Solid("#394352"),1),Shape("M 48,132 Q 63,122 80,143 L 104,172 Q 110,187 94,201 L 75,221 Q 54,234 40,220 Q 34,174 48,132 Z M 352,132 Q 337,122 320,143 L 296,172 Q 290,187 306,201 L 325,221 Q 346,234 360,220 Q 366,174 352,132 Z"));
-            // Three machined spokes and flat lower section.
-            var metal=new LinearGradientBrush(Color.FromRgb(74,83,97),Color.FromRgb(23,29,38),90);
-            dc.DrawGeometry(metal,new Pen(Solid("#687589"),1),Shape("M 79,176 L 165,177 L 190,206 L 163,233 L 76,214 Z M 321,176 L 235,177 L 210,206 L 237,233 L 324,214 Z M 174,227 L 226,227 L 245,325 L 155,325 Z"));
-            dc.DrawGeometry(Solid("#090E15"),new Pen(Solid("#384353"),1),Shape("M 188,254 L 212,254 L 220,307 L 180,307 Z"));
-            // Perforated leather on both hand grips.
-            for(int side=-1;side<=1;side+=2)
-                for(int row=0;row<9;row++)
-                    for(int col=0;col<3;col++)
-                        dc.DrawEllipse(Solid("#070B10"),null,new Point(200+side*(145+col*5),153+row*7),1.1,1.1);
+                dc.DrawRoundedRectangle(Solid("#4C5562"),new Pen(Solid("#8792A1"),1),new Rect(side<0?78:303,139,19,100),5,5);
+            var rim=Shape("M 200,48 C 292,48 362,117 362,210 C 362,301 294,370 200,370 C 106,370 38,301 38,210 C 38,117 108,48 200,48 Z M 200,79 C 126,79 70,135 70,210 C 70,283 125,338 200,338 C 275,338 330,283 330,210 C 330,135 274,79 200,79 Z");
+            dc.DrawGeometry(new LinearGradientBrush(Color.FromRgb(51,56,64),Color.FromRgb(12,16,22),90),new Pen(Solid("#626B78"),1.4),rim);
+            dc.DrawGeometry(Solid("#121820"),new Pen(Solid("#3B4655"),1),Shape("M 51,148 Q 68,137 84,158 L 99,184 Q 104,197 87,212 L 69,238 L 42,229 Q 37,185 51,148 Z M 349,148 Q 332,137 316,158 L 301,184 Q 296,197 313,212 L 331,238 L 358,229 Q 363,185 349,148 Z"));
+            var silver=new LinearGradientBrush(Color.FromRgb(172,181,192),Color.FromRgb(65,75,89),90);
+            dc.DrawGeometry(silver,new Pen(Solid("#B0BAC7"),1),Shape("M 76,184 L 150,185 L 182,225 L 153,251 L 73,216 Z M 324,184 L 250,185 L 218,225 L 247,251 L 327,216 Z M 166,245 L 234,245 L 247,336 L 223,350 L 177,350 L 153,336 Z"));
+            dc.DrawGeometry(Solid("#111720"),new Pen(Solid("#414C5C"),1),Shape("M 184,270 L 216,270 L 224,332 L 176,332 Z"));
             for(int side=-1;side<=1;side+=2) {
-                dc.DrawRoundedRectangle(Solid("#101721"),new Pen(Solid("#48566B"),1),new Rect(side<0?105:252,184,43,28),7,7);
-                dc.DrawEllipse(Solid("#278DFA"),new Pen(Solid("#8BC7FF"),0.7),new Point(200+side*74,198),6,6);
+                dc.DrawRoundedRectangle(Solid("#181F29"),new Pen(Solid("#525F70"),1),new Rect(side<0?101:257,192,42,30),5,5);
+                for(int j=0;j<3;j++)dc.DrawLine(new Pen(Solid("#8895A5"),1),new Point(200+side*78-7,200+j*7),new Point(200+side*78+7,200+j*7));
             }
-            dc.DrawEllipse(new LinearGradientBrush(Color.FromRgb(58,68,82),Color.FromRgb(16,23,33),90),new Pen(Solid("#7A879A"),1.5),new Point(200,206),47,47);
-            dc.DrawEllipse(Solid("#101721"),new Pen(Solid("#36495F"),1),new Point(200,206),30,30);
-            for(int i=0;i<6;i++) {
-                double a=i*Math.PI/3;
-                dc.DrawEllipse(Solid("#A1ADBD"),new Pen(Solid("#141A23"),1),new Point(200+38*Math.Cos(a),206+38*Math.Sin(a)),3,3);
-            }
-            // Center emblem and twelve-o'clock alignment stripe.
-            dc.DrawGeometry(Solid("#329BFF"),null,Shape("M 185,198 L 215,198 L 211,204 L 197,204 L 193,210 L 209,210 L 205,216 L 181,216 Z"));
-            dc.DrawGeometry(Solid("#2C98FF"),new Pen(Solid("#86C6FF"),1),Shape("M 192,35 Q 200,34 208,35 L 208,71 L 192,71 Z"));
-            dc.DrawLine(new Pen(Solid("#2C98FF"),2),new Point(148,342),new Point(252,342));
+            dc.DrawGeometry(new LinearGradientBrush(Color.FromRgb(47,53,62),Color.FromRgb(18,23,31),90),new Pen(Solid("#697585"),1.2),Shape("M 157,175 Q 200,157 243,175 Q 260,188 256,222 L 241,254 Q 200,277 159,254 L 144,222 Q 140,188 157,175 Z"));
+            // GT-R badge: silver GT above the red R, without extra ornament.
+            Label(dc,"GT",18,"#DFE5EC",200,194,true);
+            Label(dc,"R",28,"#D32C3D",200,210,true);
+            dc.DrawLine(new Pen(Solid("#9EAABA"),0.7),new Point(185,213),new Point(215,213));
             dc.Pop();
         }
     }

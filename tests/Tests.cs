@@ -41,6 +41,15 @@ namespace VolanteStudio {
       var surface=(System.Windows.FrameworkElement)viewport.Content;
       Check(surface.ActualWidth>=size.Width-20 && surface.ActualHeight>=size.Height-20,"Content fills viewport at "+size);
      }
+     var demoButton=(System.Windows.Controls.Button)window.FindName("DemoToggle");
+     Check(System.Windows.Controls.Grid.GetColumn(demoButton)==1 && demoButton.Content.ToString().Contains("ativa"),"Demo action is prominent in footer and identifies active mode");
+     demoButton.RaiseEvent(new System.Windows.RoutedEventArgs(System.Windows.Controls.Button.ClickEvent));
+     Check(demoButton.Content.ToString().StartsWith("Explorar"),"Demo action returns clearly to USB mode");
+     var wheel=(WheelView)((System.Windows.Controls.Grid)window.FindName("WheelHost")).Children[0];
+     wheel.Measure(new System.Windows.Size(400,400));wheel.Arrange(new System.Windows.Rect(0,0,400,400));
+     var bitmap=new System.Windows.Media.Imaging.RenderTargetBitmap(800,800,192,192,System.Windows.Media.PixelFormats.Pbgra32);
+     bitmap.Render(wheel);
+     Check(bitmap.PixelWidth==800,"GT-R illustration renders at high DPI");
      window.Close();GC.KeepAlive(controller);
     }
     app.Shutdown();

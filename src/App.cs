@@ -70,7 +70,7 @@ namespace VolanteStudio {
             AddOptionalInputs();
             Click("NavHome",()=>Navigate("Home"));Click("NavEffects",()=>Navigate("Effects"));Click("NavProfiles",()=>{RefreshProfiles();Navigate("Profiles");});Click("NavDevice",()=>Navigate("Device"));
             NativeWindowTheme.Apply(window);
-            Click("DemoToggle",()=>{ demo=!demo;lastReady=false;UpdateDemo();SetStatus(demo?"Demonstração visual":"Modo USB",demo?"Movimentos simulados. Nenhum ajuste é enviado ao volante.":"Aguardando leitura do dispositivo."); });
+            Click("DemoToggle",()=>{ this.demo=!this.demo;lastReady=false;UpdateDemo();SetStatus(this.demo?"Demonstração visual":"Modo USB",this.demo?"Movimentos simulados. Nenhum ajuste é enviado ao volante.":"Aguardando leitura do dispositivo."); });
             Click("WindowsTest",OpenWindowsTest);Click("WindowsTestDevice",OpenWindowsTest);
             Find<Button>("CenterButton").Click+=async(s,e)=>await SendCommand("DoSetCenter",null,"Centralização enviada");
             Find<Button>("ApplyButton").Click+=async(s,e)=>await Apply();
@@ -143,7 +143,13 @@ namespace VolanteStudio {
             pedals.Add(new PedalView {Key=key,Min=min,Max=max,Fill=fill,Track=track,Value=value});
         }
         void UpdateDemo() {
-            Find<Button>("DemoToggle").Content=demo?"Sair da demonstração":"Explorar demonstração";
+            var demoButton=Find<Button>("DemoToggle");
+            demoButton.Content=demo?"Demonstração ativa • Sair":"Explorar demonstração";
+            demoButton.Background=Brush(demo?"#654619":"#142F4D");
+            demoButton.BorderBrush=Brush(demo?"#F3BA55":"#448DDA");
+            demoButton.Foreground=Brush(demo?"#FFE2A8":"#D5EAFF");
+            demoButton.FontWeight=FontWeights.SemiBold;
+            demoButton.ToolTip=demo?"Modo simulado ativo. Clique para voltar ao dispositivo USB.":"Ativar movimentos simulados sem enviar ajustes ao volante.";
             Find<TextBlock>("LiveLabel").Text=demo?"MOVIMENTO SIMULADO":"POSIÇÃO DO VOLANTE";
             Find<TextBlock>("PedalsBadge").Text=demo?"SIMULADO":"AO VIVO";
             Find<TextBlock>("ContextHint").Text=demo?"Demonstração visual • dados simulados • USB sem alterações":"Configuração via USB";
