@@ -13,6 +13,10 @@ namespace VolanteStudio {
         public event Action<byte[]> PacketSent;
         Delegate sentHandler;
         EventInfo sentEvent;
+        Delegate receivedHandler;
+        EventInfo receivedEvent;
+        int steering;
+        public double SteeringPosition { get { return Math.Max(-1,Math.Min(1,System.Threading.Volatile.Read(ref steering)/32767.0)); } }
         public bool IsReady { get { return model!=null; } }
         public bool Connected { get { return hid!=null && Convert.ToString(hid.GetType().GetProperty("ConnectionStatus").GetValue(hid,null))=="Connected"; } }
         public bool CanConfigure { get { return Connected && string.Equals(ReadString("mainWindow"),"true",StringComparison.OrdinalIgnoreCase); } }
@@ -34,7 +38,21 @@ namespace VolanteStudio {
                 var method=GetType().GetMethod("OnPacketSent",BindingFlags.Instance|BindingFlags.NonPublic).MakeGenericMethod(invoke.GetParameters()[1].ParameterType);
                 sentHandler=Delegate.CreateDelegate(sentEvent.EventHandlerType,this,method);
                 sentEvent.AddEventHandler(hid,sentHandler);
+                receivedEvent=hid.GetType().GetEvent("RaisePacketReceivedEvent");
+                var receivedType=receivedEvent.EventHandlerType.GetMethod("Invoke").GetParameters()[1].ParameterType;
+                receivedHandler=Delegate.CreateDelegate(receivedEvent.EventHandlerType,this,GetType().GetMethod("OnPacketReceived",BindingFlags.Instance|BindingFlags.NonPublic).MakeGenericMethod(receivedType));
+                receivedEvent.AddEventHandler(hid,receivedHandler);
             } catch(Exception ex) { Error=Unwrap(ex).Message; Dispose(); }
+        }
+        void OnPacketReceived<T>(object sender,T buffer) {
+            if(!(bool)typeof(T).GetProperty("TransferSuccessful").GetValue(buffer,null))return;
+            int value;
+            if(TryReadSteering((byte[])typeof(T).GetProperty("buffer").GetValue(buffer,null),out value))System.Threading.Volatile.Write(ref steering,value);
+        }
+        public static bool TryReadSteering(byte[] report,out int value) {
+            value=0;
+            if(report==null || report.Length<7 || report[0]!=3)return false;
+            value=(short)(report[5] | (report[6]<<8));return true;
         }
         void OnPacketSent<T>(object sender, T buffer) {
             var success=typeof(T).GetProperty("TransferSuccessful");
@@ -67,6 +85,7 @@ namespace VolanteStudio {
         public void Dispose() {
             if(hid!=null) {
                 if(sentHandler!=null && sentEvent!=null)sentEvent.RemoveEventHandler(hid,sentHandler);
+                if(receivedHandler!=null && receivedEvent!=null)receivedEvent.RemoveEventHandler(hid,receivedHandler);
                 try { hid.GetType().GetMethod("CloseDevice").Invoke(hid,null); } catch { }
             }
             hid=null; model=null;

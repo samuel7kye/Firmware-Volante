@@ -9,7 +9,7 @@ Projeto acadêmico para a faculdade.
 
 ## Instalação
 
-**[Baixar o instalador completo (.exe)](https://github.com/samuel7kye/Firmware-Volante/raw/refs/heads/main/release/VolanteStudio-Setup-1.0.1.exe)**
+**[Baixar o instalador completo (.exe)](https://github.com/samuel7kye/Firmware-Volante/raw/refs/heads/main/release/VolanteStudio-Setup-1.0.2.exe)**
 
 1. Baixe e execute o instalador.
 2. Siga as instruções em português.
@@ -37,7 +37,7 @@ Sem o volante conectado, escolha **Explorar demonstração** para conhecer a int
 
 O aplicativo utiliza as bibliotecas EMC incluídas no pacote. O Leonardo continua enviando os comandos aos jogos pelo firmware atual. O instalador não grava firmware nem instala drivers.
 
-A interface e os 28 testes de software foram verificados na versão 1.0.1. A instalação, atualização e desinstalação foram verificadas na versão 1.0.0; a validação do novo instalador ainda está pendente. **Os testes físicos de eixos, force feedback, reconexão e funcionamento em jogos ainda estão pendentes.**
+A versão 1.0.2 corrige a conexão USB no Windows de 64 bits e lê a direção diretamente do relatório HID. Os 33 testes de software passaram. A conexão com firmware 0.932, o envio confirmado de CPR 400 e ângulo 900°, e a mudança da direção na interface foram verificados com o volante físico. Pedais (não conectados), force feedback, reconexão física e funcionamento em jogos ainda precisam de validação.
 
 ## Organização do projeto
 

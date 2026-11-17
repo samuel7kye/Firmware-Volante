@@ -8,6 +8,14 @@ namespace VolanteStudio {
   [STAThread] public static int Main() {
    string temp=Path.Combine(Path.GetTempPath(),"VolanteStudioTests-"+Guid.NewGuid().ToString("N"));
    try {
+    Check(IntPtr.Size==4,"USB vendor interop runs in a 32-bit process");
+    int steering;
+    Check(EmcBridge.TryReadSteering(new byte[]{3,0,0,0,0,255,127},out steering)&&steering==32767,"Live HID steering decodes positive travel without vendor angle initialization");
+    Check(EmcBridge.TryReadSteering(new byte[]{3,0,0,0,0,1,128},out steering)&&steering==-32767,"Live HID steering decodes negative travel");
+    Check(!EmcBridge.TryReadSteering(new byte[]{128,0,0,0,0,1,0},out steering)&&!EmcBridge.TryReadSteering(new byte[]{3},out steering),"Firmware and truncated reports cannot change steering");
+    System.Reflection.PortableExecutableKinds pe; System.Reflection.ImageFileMachine machine;
+    System.Reflection.Assembly.ReflectionOnlyLoadFrom(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"VolanteStudio.exe")).ManifestModule.GetPEKind(out pe,out machine);
+    Check((pe & System.Reflection.PortableExecutableKinds.Required32Bit)!=0,"Published application requires 32-bit USB interop on 64-bit Windows");
     Check(SettingsCatalog.Find("GetDamper").ToDevice(50)==100,"Damper matches original 0..200 scale");
     Check(SettingsCatalog.Find("GetFriction").ToDevice(100)==200,"Friction maximum matches original");
     Check(SettingsCatalog.Find("GetSoftlock").ToDevice(100)==100,"Soft lock keeps original scale");

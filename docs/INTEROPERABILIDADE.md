@@ -51,3 +51,13 @@ O construtor de pacotes da biblioteca foi exercitado **em memória**, vinculando
 ## Teste físico pendente
 
 Quando houver um volante conectado: comparar eixos no aplicativo e em `joy.cpl`; confirmar centralização e calibração; aplicar um ajuste pequeno; conferir limites e force feedback em um jogo; desconectar/reconectar; e verificar quais ajustes persistem após reiniciar a placa. Nenhuma dessas etapas foi declarada aprovada sem o hardware.
+
+## Correção USB — versão 1.0.2
+
+A biblioteca EMCHid usa estruturas nativas de 32 bits na descoberta HID. Em execução AnyCPU de 64 bits, o dispositivo VID 0013/PID 1984 aparecia na lista, mas a conexão permanecia desligada. O build agora exige x86, inclusive nos testes, com verificação do cabeçalho do executável.
+
+A direção é lida de relatórios recebidos com transferência bem-sucedida: ID 03, bytes 5 e 6 como inteiro de 16 bits com sinal, little-endian. A apresentação usa a faixa de rotação selecionada na interface. Relatórios curtos ou de outro tipo são ignorados. A leitura não envia comandos ao dispositivo.
+
+Os getters de ajustes da biblioteca começam com valores locais zerados; não representam uma leitura de EEPROM. Esses valores iniciais não substituem mais os controles preparados pelo usuário.
+
+Teste físico em 17/11/2026: Windows reconheceu o controlador; conexão com firmware 0.932; envios confirmados de CPR 400 e faixa 900° (separadamente); interface mostrou posições de -450° e +268° durante o teste. Nenhuma força de motor foi aumentada e o firmware não foi gravado. Pedais não estavam conectados. Precisão angular, force feedback, reconexão física e jogos não foram validados.

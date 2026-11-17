@@ -191,7 +191,7 @@ namespace VolanteStudio {
             try {
                 bool connected=bridge.Connected,ready=bridge.CanConfigure;
                 double time=clock.Elapsed.TotalSeconds;
-                double target=demo?Math.Sin(time*0.55)*110:connected?bridge.ReadInt("RotateAngle"):0;
+                double target=demo?Math.Sin(time*0.55)*110:connected?bridge.SteeringPosition*values["Angle"]/2.0:0;
                 if(Math.Abs(target-wheelAngle)>0.02) {wheelAngle+=(target-wheelAngle)*0.4;wheel.Angle=wheelAngle;wheel.InvalidateVisual();}
                 Find<TextBlock>("AngleValue").Text=Math.Round(demo?wheelAngle:target).ToString("0",CultureInfo.InvariantCulture);
                 for(int i=0;i<pedals.Count;i++) {
@@ -211,6 +211,9 @@ namespace VolanteStudio {
             }catch(Exception ex){timer.Stop();SetStatus("Falha na comunicação",EmcBridge.Unwrap(ex).Message);Program.WriteError(ex);foreach(var b in usbButtons)b.IsEnabled=false;Find<Button>("ApplyButton").IsEnabled=false;}
         }
         void SyncFromDevice() {
+            // Vendor getters initially contain local zeros, not settings read from EEPROM.
+            // Do not overwrite the prepared UI values or hardware fields with those defaults.
+            if(bridge.ReadInt("Angle")<30)return;
             foreach(var spec in SettingsCatalog.All) {int raw=bridge.ReadInt(spec.Key);int v=raw/spec.Scale;if(v>=spec.Min&&v<=spec.Max)SetValue(spec.Key,v);}
             Find<TextBox>("CprText").Text=bridge.ReadString("GetSetCpr");
             string mode=bridge.ReadString("HbridgeMode");foreach(ListBoxItem item in Find<ListBox>("BridgeMode").Items)if((string)item.Content==mode)item.IsSelected=true;
