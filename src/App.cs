@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
@@ -69,9 +69,9 @@ namespace VolanteStudio {
             AddPedal("Freio de mão","Handbrake",0,1024,"HandbrakeMin","HandbrakeMax","#248CFF");
             AddOptionalInputs();
             Click("NavHome",()=>Navigate("Home"));Click("NavEffects",()=>Navigate("Effects"));Click("NavProfiles",()=>{RefreshProfiles();Navigate("Profiles");});Click("NavDevice",()=>Navigate("Device"));
-            Click("Minimize",()=>window.WindowState=WindowState.Minimized);Click("Maximize",()=>ToggleMaximize());Click("Close",()=>window.Close());
-            Find<Grid>("TitleBar").MouseLeftButtonDown+=(s,e)=>{if(e.ClickCount==2)ToggleMaximize();else if(e.ButtonState==MouseButtonState.Pressed)window.DragMove();};
-            Click("DemoToggle",()=>{ demo=!demo;lastReady=false;UpdateDemo();SetStatus(demo?"Demonstração visual":"Modo USB",demo?"Movimentos simulados. Nenhum ajuste é enviado ao volante.":"Aguardando leitura do dispositivo."); });
+            NativeWindowTheme.Apply(window);
+            ResponsiveLayout.Apply(window);
+            Click("DemoToggle",()=>{ this.demo=!this.demo;lastReady=false;UpdateDemo();SetStatus(this.demo?"Demonstração visual":"Modo USB",this.demo?"Movimentos simulados. Nenhum ajuste é enviado ao volante.":"Aguardando leitura do dispositivo."); });
             Click("WindowsTest",OpenWindowsTest);Click("WindowsTestDevice",OpenWindowsTest);
             Find<Button>("CenterButton").Click+=async(s,e)=>await SendCommand("DoSetCenter",null,"Centralização enviada");
             Find<Button>("ApplyButton").Click+=async(s,e)=>await Apply();
@@ -95,13 +95,12 @@ namespace VolanteStudio {
         T Find<T>(string name) where T:class { return (T)window.FindName(name); }
         static Brush Brush(string color) { return (Brush)new BrushConverter().ConvertFromString(color); }
         void Click(string name,Action action) { Find<Button>(name).Click+=(s,e)=>action(); }
-        void ToggleMaximize() { window.WindowState=window.WindowState==WindowState.Maximized?WindowState.Normal:WindowState.Maximized; }
         void Navigate(string page) {
             foreach(var p in new[]{"Home","Effects","Profiles","Device"}) {
                 Find<Grid>(p+"Page").Visibility=p==page?Visibility.Visible:Visibility.Collapsed;
                 var b=Find<Button>("Nav"+p);b.Background=Brush(p==page?"#163456":"#00000000");b.Foreground=Brush(p==page?"#65B0FF":"#728196");
             }
-            Find<TextBlock>("PageTitle").Text=page=="Home"?"Seu próximo apex.":page=="Effects"?"Ajuste cada sensação.":page=="Profiles"?"Seu setup. Sua assinatura.":"Conectado à sua pilotagem.";
+            Find<TextBlock>("PageTitle").Text=page=="Home"?"Visão geral":page=="Effects"?"Efeitos de força":page=="Profiles"?"Perfis":"Configuração do dispositivo";
         }
         void AddSlider(string panel,string key) {
             var spec=SettingsCatalog.Find(key);var stack=new StackPanel { Margin=new Thickness(0,0,0,panel=="EffectControls"?30:15) };
@@ -145,10 +144,16 @@ namespace VolanteStudio {
             pedals.Add(new PedalView {Key=key,Min=min,Max=max,Fill=fill,Track=track,Value=value});
         }
         void UpdateDemo() {
-            Find<Button>("DemoToggle").Content=demo?"Sair da demonstração":"Explorar demonstração";
+            var demoButton=Find<Button>("DemoToggle");
+            demoButton.Content=demo?"Demonstração ativa • Sair":"Explorar demonstração";
+            demoButton.Background=Brush(demo?"#654619":"#142F4D");
+            demoButton.BorderBrush=Brush(demo?"#F3BA55":"#448DDA");
+            demoButton.Foreground=Brush(demo?"#FFE2A8":"#D5EAFF");
+            demoButton.FontWeight=FontWeights.SemiBold;
+            demoButton.ToolTip=demo?"Modo simulado ativo. Clique para voltar ao dispositivo USB.":"Ativar movimentos simulados sem enviar ajustes ao volante.";
             Find<TextBlock>("LiveLabel").Text=demo?"MOVIMENTO SIMULADO":"POSIÇÃO DO VOLANTE";
             Find<TextBlock>("PedalsBadge").Text=demo?"SIMULADO":"AO VIVO";
-            Find<TextBlock>("ContextHint").Text=demo?"Demonstração visual • dados simulados • USB sem alterações":"USB direto. O mesmo volante. Uma nova experiência.";
+            Find<TextBlock>("ContextHint").Text=demo?"Demonstração visual • dados simulados • USB sem alterações":"Configuração via USB";
             Find<TextBlock>("ContextHint").Foreground=Brush(demo?"#C8A564":"#6F7F93");UpdateEnabled();
         }
         void AddOptionalInputs() {
