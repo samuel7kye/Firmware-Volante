@@ -5,11 +5,11 @@ Aplicativo para configurar um volante Arduino Leonardo no Windows, com interface
 **Autor: Samuel — [@samuel7kye](https://github.com/samuel7kye)**
 Projeto acadêmico para a faculdade.
 
-![Volante Studio em modo de demonstração](docs/preview.jpg)
+![Volante Studio em modo de demonstração](docs/preview.png)
 
 ## Instalação
 
-**[Baixar o instalador completo (.exe)](https://github.com/samuel7kye/Firmware-Volante/raw/refs/heads/main/release/VolanteStudio-Setup-1.0.0.exe)**
+**[Baixar o instalador completo (.exe)](https://github.com/samuel7kye/Firmware-Volante/raw/refs/heads/main/release/VolanteStudio-Setup-1.0.1.exe)**
 
 1. Baixe e execute o instalador.
 2. Siga as instruções em português.
@@ -37,7 +37,7 @@ Sem o volante conectado, escolha **Explorar demonstração** para conhecer a int
 
 O aplicativo utiliza as bibliotecas EMC incluídas no pacote. O Leonardo continua enviando os comandos aos jogos pelo firmware atual. O instalador não grava firmware nem instala drivers.
 
-A interface, os 17 testes de software e a instalação, atualização e desinstalação foram verificados. **Os testes físicos de eixos, force feedback, reconexão e funcionamento em jogos ainda estão pendentes.**
+A interface e os 28 testes de software foram verificados na versão 1.0.1. A instalação, atualização e desinstalação foram verificadas na versão 1.0.0; a validação do novo instalador ainda está pendente. **Os testes físicos de eixos, force feedback, reconexão e funcionamento em jogos ainda estão pendentes.**
 
 ## Organização do projeto
 
