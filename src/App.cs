@@ -99,7 +99,7 @@ namespace VolanteStudio {
                 Find<Grid>(p+"Page").Visibility=p==page?Visibility.Visible:Visibility.Collapsed;
                 var b=Find<Button>("Nav"+p);b.Background=Brush(p==page?"#163456":"#00000000");b.Foreground=Brush(p==page?"#65B0FF":"#728196");
             }
-            Find<TextBlock>("PageTitle").Text=page=="Home"?"Seu próximo apex.":page=="Effects"?"Ajuste cada sensação.":page=="Profiles"?"Seu setup. Sua assinatura.":"Conectado à sua pilotagem.";
+            Find<TextBlock>("PageTitle").Text=page=="Home"?"Visão geral":page=="Effects"?"Efeitos de força":page=="Profiles"?"Perfis":"Configuração do dispositivo";
         }
         void AddSlider(string panel,string key) {
             var spec=SettingsCatalog.Find(key);var stack=new StackPanel { Margin=new Thickness(0,0,0,panel=="EffectControls"?30:15) };
@@ -146,7 +146,7 @@ namespace VolanteStudio {
             Find<Button>("DemoToggle").Content=demo?"Sair da demonstração":"Explorar demonstração";
             Find<TextBlock>("LiveLabel").Text=demo?"MOVIMENTO SIMULADO":"POSIÇÃO DO VOLANTE";
             Find<TextBlock>("PedalsBadge").Text=demo?"SIMULADO":"AO VIVO";
-            Find<TextBlock>("ContextHint").Text=demo?"Demonstração visual • dados simulados • USB sem alterações":"USB direto. O mesmo volante. Uma nova experiência.";
+            Find<TextBlock>("ContextHint").Text=demo?"Demonstração visual • dados simulados • USB sem alterações":"Configuração via USB";
             Find<TextBlock>("ContextHint").Foreground=Brush(demo?"#C8A564":"#6F7F93");UpdateEnabled();
         }
         void AddOptionalInputs() {
