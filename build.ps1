@@ -9,7 +9,7 @@ New-Item -ItemType Directory -Force $bin, (Join-Path $bin 'compat') | Out-Null
 $refs = @('System.dll','System.Core.dll','System.Xml.dll','System.Xml.Linq.dll','System.Xaml.dll','System.Management.dll',"$wpf\PresentationFramework.dll","$wpf\PresentationCore.dll","$wpf\WindowsBase.dll") | ForEach-Object { '/r:' + $_ }
 # EMCHid uses 32-bit native USB structures; AnyCPU silently fails on 64-bit Windows.
 $sources = Get-ChildItem -LiteralPath (Join-Path $root 'src') -Filter '*.cs' | ForEach-Object FullName
-& (Join-Path $framework 'csc.exe') /nologo /target:winexe /optimize+ /platform:x86 /utf8output "/out:$bin\VolanteStudio.exe" "/win32manifest:$root\src\app.manifest" "/resource:$root\src\MainWindow.xaml,MainWindow.xaml" @refs @sources
+& (Join-Path $framework 'csc.exe') /nologo /target:winexe "/win32icon:$root\src\VolanteStudio.ico" /optimize+ /platform:x86 /utf8output "/out:$bin\VolanteStudio.exe" "/win32manifest:$root\src\app.manifest" "/resource:$root\src\MainWindow.xaml,MainWindow.xaml" @refs @sources
 if ($LASTEXITCODE -ne 0) { throw 'Falha ao compilar o aplicativo.' }
 Copy-Item -LiteralPath (Join-Path $root 'src\App.config') -Destination (Join-Path $bin 'VolanteStudio.exe.config')
 foreach ($dll in @('EMC.dll','EMCHid.dll','MaterialDesignColors.dll','MaterialDesignThemes.Wpf.dll')) {

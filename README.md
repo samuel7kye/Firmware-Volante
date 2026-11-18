@@ -1,5 +1,9 @@
 # Volante Studio
 
+<img src="docs/icone.png" alt="Ícone do Volante Studio" width="96" height="96">
+
+Arte do ícone por **Sofia Duarte**. [Portfólio de Sofia Duarte](https://solduarte.art.br)
+
 Aplicativo para configurar um volante Arduino Leonardo no Windows, com interface em português, visual escuro, controles azuis e volante animado.
 
 **Autor: Samuel — [@samuel7kye](https://github.com/samuel7kye)**
@@ -9,7 +13,7 @@ Projeto acadêmico para a faculdade.
 
 ## Instalação
 
-**[Baixar o instalador completo (.exe)](https://github.com/samuel7kye/Firmware-Volante/raw/refs/heads/main/release/VolanteStudio-Setup-1.0.2.exe)**
+**[Baixar o instalador completo (.exe)](https://github.com/samuel7kye/Firmware-Volante/raw/refs/heads/fix/window-layout-dpi/release/VolanteStudio-Setup-1.0.3.exe)**
 
 1. Baixe e execute o instalador.
 2. Siga as instruções em português.

@@ -16,7 +16,7 @@ New-Item -ItemType Directory -Force $OutputPath | Out-Null
 $OutputPath = (Resolve-Path -LiteralPath $OutputPath).Path
 & $IsccPath "/DPayloadDir=$PayloadPath" "/DOutputPath=$OutputPath" (Join-Path $PSScriptRoot 'installer\VolanteStudio.iss')
 if ($LASTEXITCODE -ne 0) { throw 'Falha ao compilar o instalador.' }
-$setup = Join-Path $OutputPath 'VolanteStudio-Setup-1.0.2.exe'
+$setup = Join-Path $OutputPath 'VolanteStudio-Setup-1.0.3.exe'
 $hash = (Get-FileHash -LiteralPath $setup -Algorithm SHA256).Hash.ToLowerInvariant()
 Set-Content -LiteralPath ($setup + '.sha256') -Value ($hash + '  ' + [IO.Path]::GetFileName($setup)) -Encoding ascii
 Write-Output "Instalador completo: $setup"

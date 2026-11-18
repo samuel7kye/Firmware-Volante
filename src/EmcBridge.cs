@@ -17,6 +17,7 @@ namespace VolanteStudio {
         EventInfo receivedEvent;
         int steering;
         public double SteeringPosition { get { return Math.Max(-1,Math.Min(1,System.Threading.Volatile.Read(ref steering)/32767.0)); } }
+        public int RawSteering { get { return System.Threading.Volatile.Read(ref steering); } }
         public bool IsReady { get { return model!=null; } }
         public bool Connected { get { return hid!=null && Convert.ToString(hid.GetType().GetProperty("ConnectionStatus").GetValue(hid,null))=="Connected"; } }
         public bool CanConfigure { get { return Connected && string.Equals(ReadString("mainWindow"),"true",StringComparison.OrdinalIgnoreCase); } }
