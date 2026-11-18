@@ -31,6 +31,12 @@ namespace VolanteStudio
                     app.DispatcherUnhandledException += (s, e) => { WriteError(e.Exception); MessageBox.Show("Não foi possível concluir a ação. " + EmcBridge.Unwrap(e.Exception).Message, "Volante Studio"); e.Handled = true; };
                     Window window;
                     using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("MainWindow.xaml")) window = (Window)XamlReader.Load(stream);
+                    using (var stream = typeof(Program).Assembly.GetManifestResourceStream("StudioLogo.png"))
+                    {
+                        var decoder = new System.Windows.Media.Imaging.PngBitmapDecoder(stream,
+                            System.Windows.Media.Imaging.BitmapCreateOptions.None, System.Windows.Media.Imaging.BitmapCacheOption.OnLoad);
+                        ((Image)window.FindName("StudioLogo")).Source = decoder.Frames[0];
+                    }
                     var controller = new StudioController(window, args.Contains("--demo"));
                     app.Run(window);
                     GC.KeepAlive(controller);
