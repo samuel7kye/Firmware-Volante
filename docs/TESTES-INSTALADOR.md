@@ -17,3 +17,12 @@ Compilado com Inno Setup 7.1.1 e testado no Windows em uma pasta isolada, sem mo
 O teste da comunicação utilizou o executável instalado e verificou os caminhos das bibliotecas carregadas. Nenhum dispositivo USB recebeu comandos. O teste físico do volante permanece pendente.
 
 O instalador não inclui dados pessoais, perfis de teste, logs nem firmware. Não há assinatura digital de editor no executável gerado. O arquivo SHA-256 acompanha o instalador para conferência de integridade.
+
+## Atualização 1.0.2 — 17/11/2026
+
+- Backup da instalação anterior preservado localmente.
+- Atualização silenciosa da instalação em uso: retorno 0.
+- SHA-256 do executável instalado idêntico ao build testado.
+- Aplicativo instalado aberto: versão 1.0.2, USB conectado, firmware 0.932 e posição -62° observada.
+- 33 testes automatizados aprovados, incluindo arquitetura x86 e decodificação dos relatórios da direção.
+- Desinstalação não repetida nesta atualização. Pedais, force feedback, reconexão física e jogos não foram testados.
